@@ -21,15 +21,15 @@ from flask import jsonify
 from utils import get_base_url, allowed_file, and_syntax
 
 # import stuff for our models
-import torch
-from aitextgen import aitextgen
+# import torch
+# from aitextgen import aitextgen
 
 '''
 Coding center code - comment out the following 4 lines of code when ready for production
 '''
 # load up the model into memory
 # you will need to have all your trained model in the app/ directory.
-ai = aitextgen(to_gpu=False, model=r"EleutherAI/gpt-neo-125M")
+# ai = aitextgen(to_gpu=False, model=r"EleutherAI/gpt-neo-125M")
 
 # setup the webserver
 # port may need to be changed if there are multiple flask servers running on same server
@@ -55,27 +55,28 @@ def home_post():
 #@app.route('/results')
 @app.route(base_url + '/results')
 def results():
-    return render_template('Write-your-story-with-AI.html', generated=None)
+    return render_template('Test-NLP-model.html', generated=None)
 
 #@app.route('/generate_text', methods=["POST"])
-@app.route(base_url + '/generate_text', methods=["POST"])
-def generate_text():
+@app.route(base_url + '/infer_with_model', methods=["POST"])
+def infer_with_model():
     """
     view function that will return json response for generated text. 
     """
 
     prompt = request.form['prompt']
     if prompt is not None:
-        generated = ai.generate(
-            n=3,
-            batch_size=3,
-            prompt=str(prompt),
-            max_length=50,
-            temperature=0.9,
-            return_as_list=True
-        )
+        # generated = ai.generate(
+        #     n=3,
+        #     batch_size=3,
+        #     prompt=str(prompt),
+        #     max_length=50,
+        #     temperature=0.9,
+        #     return_as_list=True
+        # )
+        inferred_result = 'Here is a test model pretending to do something.'
 
-    data = {'generated_ls': generated}
+    data = {'result': inferred_result}
 
     return jsonify(data)
 
@@ -84,7 +85,7 @@ if __name__ == "__main__":
     coding center code
     '''
     # IMPORTANT: change the cocalcx.ai-camp.org to the site where you are editing this file.
-    website_url = 'cocalcx.ai-camp.org'
+    website_url = 'coding.ai-camp.org'
     print(f"Try to open\n\n    https://{website_url}" + base_url + '\n\n')
 
     app.run(host = '0.0.0.0', port=port, debug=True)
